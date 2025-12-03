@@ -21,16 +21,16 @@ export default function WalletConnectionStatus() {
       </div>
 
       {(isConnecting || isLoading) && (
-        <div
-          role="status"
+        <output
           className="flex items-center justify-center gap-2 rounded-lg bg-blue-50 px-4 py-2 text-sm text-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
+          aria-live="polite"
         >
           <span
             aria-hidden
             className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"
           />
           <span>Connecting to wallet…</span>
-        </div>
+        </output>
       )}
 
       {error && (
