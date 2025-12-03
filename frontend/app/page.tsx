@@ -1,12 +1,12 @@
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import WalletConnectionStatus from '@/components/WalletConnectionStatus';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function Home() {
-  const { isConnected, address } = useAccount();
+  const { isConnected } = useAccount();
   const router = useRouter();
 
   useEffect(() => {
@@ -35,17 +35,7 @@ export default function Home() {
             Connect your wallet to start tracking your habits on the blockchain
           </p>
           
-          <div className="flex justify-center">
-            <ConnectButton />
-          </div>
-
-          {isConnected && address && (
-            <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <p className="text-sm text-green-800 dark:text-green-300">
-                Connected: {address.slice(0, 6)}...{address.slice(-4)}
-              </p>
-            </div>
-          )}
+          <WalletConnectionStatus />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
