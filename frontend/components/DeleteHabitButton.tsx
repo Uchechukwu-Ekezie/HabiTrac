@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
+import HabiTracABI from '@/abis/HabiTrac.json';
 
 interface DeleteHabitButtonProps {
   habitId: number;
@@ -12,6 +13,17 @@ interface DeleteHabitButtonProps {
 export default function DeleteHabitButton({ habitId, habitName, onSuccess }: DeleteHabitButtonProps) {
   const { address } = useAccount();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
+
+  const { data, write, isLoading: isPending, error } = useContractWrite({
+    address: contractAddress as `0x${string}`,
+    abi: HabiTracABI,
+    functionName: 'deleteHabit',
+  });
+
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
 
   const handleOpenDialog = () => {
     setShowConfirmDialog(true);
@@ -19,6 +31,18 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
 
   const handleCloseDialog = () => {
     setShowConfirmDialog(false);
+  };
+
+  const handleDelete = async () => {
+    if (!address) return;
+
+    try {
+      write({
+        args: [BigInt(habitId)],
+      });
+    } catch (err) {
+      console.error('Error deleting habit:', err);
+    }
   };
 
   return (
