@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useAccount, useContractRead } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
 import Navigation from '@/components/Navigation';
@@ -16,6 +16,7 @@ interface Habit {
 
 export default function HabitDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const habitId = Number(params.id);
   const { address } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
@@ -58,6 +59,12 @@ export default function HabitDetailPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <Navigation />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <button
+          onClick={() => router.push('/dashboard')}
+          className="mb-4 text-blue-600 dark:text-blue-400 hover:underline"
+        >
+          Back to Dashboard
+        </button>
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             {habit.name}
