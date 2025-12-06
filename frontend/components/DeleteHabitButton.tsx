@@ -62,7 +62,7 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
               Delete Habit
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Are you sure you want to delete "{habitName}"? This action cannot be undone.
+              Are you sure? This action cannot be undone.
             </p>
             <div className="flex gap-3 justify-end">
               <button
