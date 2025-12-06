@@ -64,6 +64,15 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
             <p className="text-gray-600 dark:text-gray-300 mb-6">
               Are you sure? This action cannot be undone.
             </p>
+            
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <p className="text-sm text-red-600 dark:text-red-400">
+                  {error.message}
+                </p>
+              </div>
+            )}
+
             <div className="flex gap-3 justify-end">
               <button
                 onClick={handleCloseDialog}
