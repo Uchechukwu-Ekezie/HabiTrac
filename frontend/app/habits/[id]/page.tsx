@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { useAccount, useContractRead } from 'wagmi';
-import { useRouter } from 'next/navigation';
-import Navigation from '@/components/Navigation';
-import DeleteHabitButton from '@/components/DeleteHabitButton';
 import HabiTracABI from '@/abis/HabiTrac.json';
+import Navigation from '@/components/Navigation';
 
 interface Habit {
   id: number;
@@ -16,47 +14,41 @@ interface Habit {
   isActive: boolean;
 }
 
-export default function HabitDetailPage({ params }: { params: { id: string } }) {
-  const { address, isConnected } = useAccount();
-  const router = useRouter();
+export default function HabitDetailPage() {
+  const params = useParams();
+  const habitId = Number(params.id);
+  const { address } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
-  const habitId = parseInt(params.id);
 
-  const { data: userHabits, refetch } = useContractRead({
+  const { data: userHabits } = useContractRead({
     address: contractAddress as `0x${string}`,
     abi: HabiTracABI,
     functionName: 'getUserHabits',
     args: address ? [address] : undefined,
     enabled: !!address,
+    watch: true,
   });
-
-  useEffect(() => {
-    if (!isConnected) {
-      router.push('/');
-    }
-  }, [isConnected, router]);
-
-  if (!isConnected) {
-    return null;
-  }
 
   const habits = (userHabits as Habit[]) || [];
   const habit = habits.find(h => Number(h.id) === habitId);
+
+  if (!address) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+        <Navigation />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <p className="text-gray-600 dark:text-gray-300">Please connect your wallet</p>
+        </main>
+      </div>
+    );
+  }
 
   if (!habit) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
         <Navigation />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-300 mb-4">Habit not found</p>
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-            >
-              Back to Dashboard
-            </button>
-          </div>
+          <p className="text-gray-600 dark:text-gray-300">Habit not found</p>
         </main>
       </div>
     );
@@ -66,25 +58,17 @@ export default function HabitDetailPage({ params }: { params: { id: string } }) 
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <Navigation />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-0">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             {habit.name}
           </h1>
-          <DeleteHabitButton 
-            habitId={habit.id} 
-            habitName={habit.name}
-            onSuccess={() => {
-              router.push('/dashboard');
-            }}
-          />
+          {habit.description && (
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              {habit.description}
+            </p>
+          )}
         </div>
-        {habit.description && (
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
-            {habit.description}
-          </p>
-        )}
       </main>
     </div>
   );
 }
-
