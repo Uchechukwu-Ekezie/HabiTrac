@@ -20,6 +20,7 @@ contract HabiTrac is Ownable {
     }
 
     mapping(address => Habit[]) public userHabits;
+    mapping(uint256 => address) public habitOwners;
     mapping(address => mapping(uint256 => HabitLog[])) public habitLogs;
     mapping(address => mapping(uint256 => uint256)) public habitStreaks;
     mapping(address => mapping(uint256 => uint256)) public totalLoggedDays;
@@ -50,6 +51,7 @@ contract HabiTrac is Ownable {
         });
 
         userHabits[msg.sender].push(newHabit);
+        habitOwners[habitId] = msg.sender;
         
         // Track unique users
         if (userHabits[msg.sender].length == 1) {
