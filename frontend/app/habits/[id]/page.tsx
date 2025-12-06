@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAccount, useContractRead } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
 import Navigation from '@/components/Navigation';
+import DeleteHabitButton from '@/components/DeleteHabitButton';
 
 interface Habit {
   id: number;
@@ -74,6 +75,13 @@ export default function HabitDetailPage() {
               {habit.description}
             </p>
           )}
+          <div className="mt-6">
+            <DeleteHabitButton 
+              habitId={habit.id} 
+              habitName={habit.name}
+              onSuccess={() => router.push('/dashboard')}
+            />
+          </div>
         </div>
       </main>
     </div>
