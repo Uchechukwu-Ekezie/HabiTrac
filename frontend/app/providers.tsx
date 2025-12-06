@@ -12,9 +12,12 @@ const { chains, publicClient } = configureChains(
   [publicProvider()]
 );
 
+// Use REOWN_ID from environment variable
+const projectId = process.env.NEXT_PUBLIC_REOWN_ID || process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '';
+
 const { connectors } = getDefaultWallets({
   appName: 'HabiTrac',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'default-project-id',
+  projectId: projectId,
   chains,
 });
 
