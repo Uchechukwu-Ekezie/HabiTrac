@@ -45,8 +45,9 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
     }
   };
 
-  if (isSuccess && onSuccess) {
+  if (isSuccess && onSuccess && !showConfirmDialog) {
     onSuccess();
+    setShowConfirmDialog(false);
   }
 
   const isLoading = isPending || isConfirming;
