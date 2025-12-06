@@ -1,15 +1,12 @@
 {
-  "name": "habitrac",
+  "name": "habitrac-frontend",
   "version": "1.0.0",
-  "description": "Decentralized habit tracking dApp with rewards",
+  "description": "HabiTrac frontend application",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "compile": "hardhat compile",
-    "deploy:base": "hardhat run scripts/deploy.js --network base",
-    "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia",
-    "test": "hardhat test"
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "^14.0.0",
@@ -22,9 +19,6 @@
     "viem": "^2.0.0"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "@openzeppelin/contracts": "^5.0.0",
-    "hardhat": "^2.19.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
