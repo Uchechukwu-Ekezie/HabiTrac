@@ -25,7 +25,6 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
     if (!address || !name.trim()) return;
 
     try {
-      // Note: In a real app, you'd get the contract address from environment variables
       const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
       
       await writeContract({
@@ -40,9 +39,11 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
   };
 
   if (isSuccess) {
-    if (onSuccess) onSuccess();
     setName('');
     setDescription('');
+    if (onSuccess) {
+      setTimeout(() => onSuccess(), 1000);
+    }
   }
 
   return (
