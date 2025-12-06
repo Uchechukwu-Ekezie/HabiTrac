@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useAccount, useContractRead } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
@@ -29,8 +30,13 @@ export default function HabitDetailPage({ params }: { params: { id: string } }) 
     enabled: !!address,
   });
 
+  useEffect(() => {
+    if (!isConnected) {
+      router.push('/');
+    }
+  }, [isConnected, router]);
+
   if (!isConnected) {
-    router.push('/');
     return null;
   }
 
@@ -42,7 +48,15 @@ export default function HabitDetailPage({ params }: { params: { id: string } }) 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
         <Navigation />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <p className="text-gray-600 dark:text-gray-300">Habit not found</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+            <p className="text-gray-600 dark:text-gray-300 mb-4">Habit not found</p>
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              Back to Dashboard
+            </button>
+          </div>
         </main>
       </div>
     );
