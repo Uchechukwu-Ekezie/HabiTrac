@@ -34,15 +34,22 @@ export default function HabitList() {
 
   useEffect(() => {
     if (userHabits) {
-      setHabits(userHabits as Habit[]);
+      const habitsArray = userHabits as Habit[];
+      setHabits(habitsArray);
       
-      // Fetch streaks and total days for each habit
-      const activeHabits = (userHabits as Habit[]).filter(h => h.isActive);
-      activeHabits.forEach(async (habit) => {
-        // Fetch streak
-        // Note: In a real implementation, you'd use useReadContract for each habit
-        // For now, we'll use a simplified approach
+      // Initialize streaks and total days
+      const newStreaks: Record<number, bigint> = {};
+      const newTotalDays: Record<number, bigint> = {};
+      
+      habitsArray.forEach((habit) => {
+        if (habit.isActive) {
+          newStreaks[Number(habit.id)] = 0n;
+          newTotalDays[Number(habit.id)] = 0n;
+        }
       });
+      
+      setStreaks(newStreaks);
+      setTotalDays(newTotalDays);
     }
   }, [userHabits]);
 
