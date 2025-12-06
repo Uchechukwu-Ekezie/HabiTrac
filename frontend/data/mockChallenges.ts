@@ -1,0 +1,55 @@
+import { Challenge } from '@/types/challenge';
+
+export const mockChallenges: Challenge[] = [
+  {
+    id: '1',
+    name: '30-Day Fitness Challenge',
+    description: 'Complete 30 minutes of exercise every day for 30 days. Track your workouts and build a healthy routine!',
+    participants: 245,
+    maxParticipants: 500,
+    startDate: new Date('2024-01-01'),
+    endDate: new Date('2024-01-31'),
+    reward: '500 $HABIT tokens',
+  },
+  {
+    id: '2',
+    name: 'Daily Meditation Streak',
+    description: 'Meditate for at least 10 minutes daily. Build mindfulness and reduce stress while earning rewards.',
+    participants: 189,
+    maxParticipants: 300,
+    startDate: new Date('2024-01-15'),
+    endDate: new Date('2024-02-15'),
+    reward: '300 $HABIT tokens',
+  },
+  {
+    id: '3',
+    name: 'Read Every Day Challenge',
+    description: 'Read for 30 minutes every day. Expand your knowledge and develop a reading habit.',
+    participants: 312,
+    maxParticipants: 1000,
+    startDate: new Date('2024-02-01'),
+    endDate: new Date('2024-03-01'),
+    reward: '400 $HABIT tokens',
+  },
+  {
+    id: '4',
+    name: 'Water Intake Tracker',
+    description: 'Drink 8 glasses of water daily. Stay hydrated and maintain your health goals.',
+    participants: 156,
+    maxParticipants: 200,
+    startDate: new Date('2024-01-20'),
+    endDate: new Date('2024-02-20'),
+    reward: '250 $HABIT tokens',
+  },
+  {
+    id: '5',
+    name: 'Early Bird Challenge',
+    description: 'Wake up before 7 AM every day. Build a consistent morning routine and boost productivity.',
+    participants: 98,
+    maxParticipants: 150,
+    startDate: new Date('2024-02-10'),
+    endDate: new Date('2024-03-10'),
+    reward: '350 $HABIT tokens',
+  },
+];
+
