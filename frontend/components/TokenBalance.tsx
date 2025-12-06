@@ -1,9 +1,15 @@
 'use client';
 
-import { useTokenBalance } from '@/hooks/useTokenBalance';
+import { useAccount } from 'wagmi';
+import { useTokenBalanceContext } from '@/contexts/TokenBalanceContext';
 
 export default function TokenBalance() {
-  const { balance, isLoading } = useTokenBalance();
+  const { isConnected } = useAccount();
+  const { balance, isLoading } = useTokenBalanceContext();
+
+  if (!isConnected) {
+    return null;
+  }
 
   if (isLoading) {
     return (
