@@ -15,7 +15,7 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
 
-  const { data, write, isLoading: isPending } = useContractWrite({
+  const { data, write, isLoading: isPending, error } = useContractWrite({
     address: contractAddress as `0x${string}`,
     abi: HabiTracABI,
     functionName: 'deleteHabit',
@@ -27,9 +27,13 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
 
   const handleDelete = async () => {
     if (!address) return;
-    write({
-      args: [BigInt(habitId)],
-    });
+    try {
+      write({
+        args: [BigInt(habitId)],
+      });
+    } catch (err) {
+      console.error('Error deleting habit:', err);
+    }
   };
 
   if (isSuccess && onSuccess) {
@@ -57,6 +61,15 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
             <p className="text-gray-600 dark:text-gray-300 mb-6">
               Are you sure you want to delete "{habitName}"? This action cannot be undone.
             </p>
+            
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <p className="text-sm text-red-600 dark:text-red-400">
+                  {error.message}
+                </p>
+              </div>
+            )}
+
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowConfirmDialog(false)}
