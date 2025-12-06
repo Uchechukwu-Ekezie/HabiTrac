@@ -50,6 +50,9 @@ export function TokenBalanceProvider({ children }: { children: ReactNode }) {
 
   const updateBalance = (newBalance: string) => {
     setBalance(newBalance);
+    if (address) {
+      localStorage.setItem(`tokenBalance_${address}`, newBalance);
+    }
   };
 
   return (
