@@ -24,9 +24,16 @@ export default function ChallengesPage() {
     return null;
   }
 
+  const [joinedChallenges, setJoinedChallenges] = useState<Set<string>>(new Set());
+
   const handleJoinChallenge = (challengeId: string) => {
-    console.log('Joining challenge:', challengeId);
-    // TODO: Implement join challenge logic
+    if (joinedChallenges.has(challengeId)) {
+      alert('You have already joined this challenge!');
+      return;
+    }
+    
+    setJoinedChallenges(prev => new Set(prev).add(challengeId));
+    alert(`Successfully joined challenge!`);
   };
 
   return (
@@ -67,6 +74,7 @@ export default function ChallengesPage() {
               key={challenge.id}
               challenge={challenge}
               onJoin={handleJoinChallenge}
+              isJoined={joinedChallenges.has(challenge.id)}
             />
           ))}
         </div>

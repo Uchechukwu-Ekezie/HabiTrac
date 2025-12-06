@@ -5,9 +5,10 @@ import { Challenge } from '@/types/challenge';
 interface ChallengeCardProps {
   challenge: Challenge;
   onJoin: (challengeId: string) => void;
+  isJoined?: boolean;
 }
 
-export default function ChallengeCard({ challenge, onJoin }: ChallengeCardProps) {
+export default function ChallengeCard({ challenge, onJoin, isJoined = false }: ChallengeCardProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -22,9 +23,14 @@ export default function ChallengeCard({ challenge, onJoin }: ChallengeCardProps)
         </div>
         <button
           onClick={() => onJoin(challenge.id)}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          disabled={isJoined}
+          className={`font-semibold py-2 px-4 rounded-lg transition-colors ${
+            isJoined
+              ? 'bg-gray-400 text-white cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700 text-white'
+          }`}
         >
-          Join Challenge
+          {isJoined ? 'Joined' : 'Join Challenge'}
         </button>
       </div>
     </div>
