@@ -11,9 +11,19 @@ interface DeleteHabitButtonProps {
 
 export default function DeleteHabitButton({ habitId, habitName, onSuccess }: DeleteHabitButtonProps) {
   const { address } = useAccount();
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setShowConfirmDialog(false);
+  };
 
   return (
     <button
+      onClick={handleOpenDialog}
       disabled={!address}
       className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
     >
