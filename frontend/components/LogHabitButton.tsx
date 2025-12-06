@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
+import { useTokenBalanceContext } from '@/contexts/TokenBalanceContext';
 
 interface LogHabitButtonProps {
   habitId: number;
@@ -11,6 +12,7 @@ interface LogHabitButtonProps {
 
 export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonProps) {
   const { address } = useAccount();
+  const { refetch: refetchBalance } = useTokenBalanceContext();
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
 
   const { data, write, isLoading: isPending, error } = useContractWrite({
@@ -36,9 +38,15 @@ export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonPro
     }
   };
 
-  if (isSuccess && onSuccess) {
-    onSuccess();
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      // Refresh token balance when habit is logged successfully
+      refetchBalance();
+      if (onSuccess) {
+        onSuccess();
+      }
+    }
+  }, [isSuccess, refetchBalance, onSuccess]);
 
   const isLoading = isPending || isConfirming;
 
