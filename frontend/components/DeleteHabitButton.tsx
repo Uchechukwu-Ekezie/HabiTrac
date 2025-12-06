@@ -56,7 +56,7 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
       <button
         onClick={handleOpenDialog}
         disabled={isLoading || !address}
-        className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+        className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm shadow-sm hover:shadow-md"
       >
         Delete Habit
       </button>
