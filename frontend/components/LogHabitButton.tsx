@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
 
 interface LogHabitButtonProps {
@@ -11,13 +11,16 @@ interface LogHabitButtonProps {
 
 export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonProps) {
   const { address } = useAccount();
-  const [isLogging, setIsLogging] = useState(false);
-
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
 
-  const { data: hash, writeContract, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash,
+  const { data, write, isLoading: isPending, error } = useContractWrite({
+    address: contractAddress as `0x${string}`,
+    abi: HabiTracABI,
+    functionName: 'logHabit',
+  });
+
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
   });
 
   const handleLogHabit = async () => {
@@ -25,11 +28,7 @@ export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonPro
 
     try {
       const currentTimestamp = Math.floor(Date.now() / 1000);
-      
-      await writeContract({
-        address: contractAddress as `0x${string}`,
-        abi: HabiTracABI,
-        functionName: 'logHabit',
+      write({
         args: [BigInt(habitId), BigInt(currentTimestamp)],
       });
     } catch (err) {
@@ -67,4 +66,3 @@ export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonPro
     </div>
   );
 }
-

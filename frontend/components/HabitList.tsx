@@ -1,6 +1,6 @@
 'use client';
 
-import { useAccount, useReadContract } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
 import HabitItem from './HabitItem';
 
@@ -17,14 +17,13 @@ export default function HabitList() {
   const { address } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
 
-  const { data: userHabits, refetch } = useReadContract({
+  const { data: userHabits, refetch } = useContractRead({
     address: contractAddress as `0x${string}`,
     abi: HabiTracABI,
     functionName: 'getUserHabits',
     args: address ? [address] : undefined,
-    query: {
-      enabled: !!address,
-    },
+    enabled: !!address,
+    watch: true,
   });
 
   if (!address) {
@@ -67,4 +66,3 @@ export default function HabitList() {
     </div>
   );
 }
-

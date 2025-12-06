@@ -1,6 +1,6 @@
 'use client';
 
-import { useAccount, useReadContract } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
 import LogHabitButton from './LogHabitButton';
 
@@ -22,24 +22,22 @@ export default function HabitItem({ habit, onUpdate }: HabitItemProps) {
   const { address } = useAccount();
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
 
-  const { data: streak } = useReadContract({
+  const { data: streak } = useContractRead({
     address: contractAddress as `0x${string}`,
     abi: HabiTracABI,
     functionName: 'getHabitStreak',
     args: address ? [address, BigInt(habit.id)] : undefined,
-    query: {
-      enabled: !!address,
-    },
+    enabled: !!address,
+    watch: true,
   });
 
-  const { data: totalDays } = useReadContract({
+  const { data: totalDays } = useContractRead({
     address: contractAddress as `0x${string}`,
     abi: HabiTracABI,
     functionName: 'getTotalLoggedDays',
     args: address ? [address, BigInt(habit.id)] : undefined,
-    query: {
-      enabled: !!address,
-    },
+    enabled: !!address,
+    watch: true,
   });
 
   return (
@@ -72,4 +70,3 @@ export default function HabitItem({ habit, onUpdate }: HabitItemProps) {
     </div>
   );
 }
-

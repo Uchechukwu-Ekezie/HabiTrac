@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { parseEther } from 'viem';
+import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
 
 interface CreateHabitFormProps {
@@ -15,9 +14,16 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
   const [description, setDescription] = useState('');
   const [frequency, setFrequency] = useState('daily');
 
-  const { data: hash, writeContract, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash,
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
+
+  const { data, write, isLoading: isPending, error } = useContractWrite({
+    address: contractAddress as `0x${string}`,
+    abi: HabiTracABI,
+    functionName: 'createHabit',
+  });
+
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,12 +31,7 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
     if (!address || !name.trim()) return;
 
     try {
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
-      
-      await writeContract({
-        address: contractAddress as `0x${string}`,
-        abi: HabiTracABI,
-        functionName: 'createHabit',
+      write({
         args: [name, description],
       });
     } catch (err) {
@@ -124,4 +125,3 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
     </div>
   );
 }
-
