@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
+import { parseTransactionError } from '@/utils/parseTransactionError';
+import ErrorMessage from './ErrorMessage';
 
 interface CreateHabitFormProps {
   onSuccess?: () => void;
@@ -99,11 +101,10 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-sm text-red-800 dark:text-red-300">
-              Error: {error.message}
-            </p>
-          </div>
+          <ErrorMessage 
+            error={parseTransactionError(error)} 
+            onRetry={handleSubmit}
+          />
         )}
 
         <button
