@@ -58,12 +58,15 @@ export function parseTransactionError(error: any): ParsedError {
   // Network errors
   if (
     errorCode === 'NETWORK_ERROR' ||
+    errorCode === 'NETWORK_ERROR' ||
     errorMessage.toLowerCase().includes('network') ||
     errorMessage.toLowerCase().includes('connection') ||
-    errorMessage.toLowerCase().includes('timeout')
+    errorMessage.toLowerCase().includes('timeout') ||
+    errorMessage.toLowerCase().includes('fetch failed') ||
+    errorMessage.toLowerCase().includes('network request failed')
   ) {
     return {
-      message: 'Network error. Please check your connection and try again.',
+      message: 'Network connection error. Please check your internet connection and try again.',
       type: 'network_error',
       actionable: true,
       actionText: 'Retry',
