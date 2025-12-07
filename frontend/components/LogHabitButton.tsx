@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
+import { parseTransactionError } from '@/utils/parseTransactionError';
+import ErrorMessage from './ErrorMessage';
 
 interface LogHabitButtonProps {
   habitId: number;
@@ -53,9 +55,12 @@ export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonPro
       </button>
       
       {error && (
-        <p className="text-xs text-red-600 dark:text-red-400 max-w-[150px] text-right">
-          {error.message}
-        </p>
+        <div className="max-w-[200px]">
+          <ErrorMessage 
+            error={parseTransactionError(error)} 
+            onRetry={handleLogHabit}
+          />
+        </div>
       )}
       
       {isSuccess && (
