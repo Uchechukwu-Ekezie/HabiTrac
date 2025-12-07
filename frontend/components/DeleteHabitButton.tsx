@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi';
 import HabiTracABI from '@/abis/HabiTrac.json';
+import { parseTransactionError } from '@/utils/parseTransactionError';
+import ErrorMessage from './ErrorMessage';
 
 interface DeleteHabitButtonProps {
   habitId: number;
@@ -81,10 +83,11 @@ export default function DeleteHabitButton({ habitId, habitName, onSuccess }: Del
             </p>
             
             {error && (
-              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-sm text-red-600 dark:text-red-400">
-                  {error.message}
-                </p>
+              <div className="mb-4">
+                <ErrorMessage 
+                  error={parseTransactionError(error)} 
+                  onRetry={handleDelete}
+                />
               </div>
             )}
 
