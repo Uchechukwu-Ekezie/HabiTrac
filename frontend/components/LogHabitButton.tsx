@@ -21,7 +21,7 @@ export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonPro
     functionName: 'logHabit',
   });
 
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransaction({
+  const { isLoading: isConfirming, isSuccess, error: waitError } = useWaitForTransaction({
     hash: data?.hash,
   });
 
@@ -54,10 +54,10 @@ export default function LogHabitButton({ habitId, onSuccess }: LogHabitButtonPro
         {isLoading ? 'Logging...' : 'Log Today'}
       </button>
       
-      {error && (
+      {(error || waitError) && (
         <div className="max-w-[200px]">
           <ErrorMessage 
-            error={parseTransactionError(error)} 
+            error={parseTransactionError(error || waitError)} 
             onRetry={handleLogHabit}
           />
         </div>
