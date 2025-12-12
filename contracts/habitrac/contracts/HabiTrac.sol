@@ -128,9 +128,15 @@ contract HabiTrac is Ownable {
     
     function _distributeReward(address _user, uint256 _amount) internal {
         if (_amount > 0 && address(rewardToken) != address(0)) {
-            // Try to transfer tokens from contract balance
-            // Contract owner should fund the contract with tokens
-            SafeERC20.safeTransfer(rewardToken, _user, _amount);
+            // Mint tokens directly to user
+            // Requires HabiTrac contract to be set as minter in token contract
+            (bool success, ) = address(rewardToken).call(
+                abi.encodeWithSignature("mint(address,uint256)", _user, _amount)
+            );
+            if (!success) {
+                // Fallback to transfer if minting not available
+                SafeERC20.safeTransfer(rewardToken, _user, _amount);
+            }
         }
     }
 
