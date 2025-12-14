@@ -4,10 +4,10 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useConnect } from 'wagmi';
 import { BaseError } from 'viem';
 
-type WalletConnectionStatusProps = {
+type WalletConnectionStatusProps = Readonly<{
   className?: string;
   showDisconnectedMessage?: boolean;
-};
+}>;
 
 export default function WalletConnectionStatus({
   className,
